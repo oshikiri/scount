@@ -20,7 +20,7 @@ $ scount -h
 Usage of scount:
   -a    Use approximate counting algorithm (default is naive counting)
   -f int
-        Flush counting progress every ${flushMilliSec} [msec] (default 100)
+        Flush counting progress every X [msec] (default 100)
   -n int
         Print the top N items (default 10)
   -t float

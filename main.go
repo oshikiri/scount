@@ -8,7 +8,7 @@ func main() {
 	var approximateCountingThreshold = flag.Float64("t", 1e-5, "theta of KSP algorithm")
 	//	var separator = flag.String("s", " ", "[WIP] Separator for tuple counting")
 	separator := " "
-	var flushMilliSec = flag.Int64("f", 100, "Flush counting progress every ${flushMilliSec} [msec]")
+	var flushMilliSec = flag.Int64("f", 100, "Flush counting progress every X [msec]")
 	useJSONPrinter := false
 	flag.Parse()
 
