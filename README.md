@@ -1,7 +1,7 @@
 scount: a CLI streaming counter written in Go
 ==========
 
-// Add badges
+[![Build Status](https://travis-ci.org/oshikiri/scount.svg?branch=master)](https://travis-ci.org/oshikiri/scount)
 
 ![demo animation: approximate count using text8](demo/demo-text8-approximate-count.gif)
 
