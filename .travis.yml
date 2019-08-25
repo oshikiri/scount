@@ -11,4 +11,4 @@ script:
   - cd $HOME/gopath/src/github.com/oshikiri/scount/
   - go build
   - go test
-  - bash ./test/test_scount.sh
+  - bash ./test/test_scount.bash
