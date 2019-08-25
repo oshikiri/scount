@@ -1,0 +1,15 @@
+language: go
+
+go:
+  - 1.x
+  - 1.12.x
+  - stable
+
+before_script:
+  - go install github.com/oshikiri/scount
+
+script:
+  - diff -u <(echo -n) <(gofmt -d -s .)
+  - diff -u <(echo -n) <(golint ./...)
+  - go test ./...
+  - bash ./oshikiri/scount/test/test_scount.sh
