@@ -1,0 +1,14 @@
+language: go
+
+go:
+  - 1.x
+  - 1.12.x
+  - stable
+
+script:
+  - diff -u <(echo -n) <(gofmt -d -s .)
+  - diff -u <(echo -n) <(golint ./...)
+  - cd $HOME/gopath/src/github.com/oshikiri/scount/
+  - go build
+  - go test
+  - bash ./test/test_scount.bash
