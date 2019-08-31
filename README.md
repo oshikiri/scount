@@ -37,6 +37,19 @@ go test
 bash ./test/test_scount.sh
 ```
 
-## TODO
-- [ ] Setup UI: implement keybinds
-- [ ] Add tuple counter (`-s` separator option)
+## TODO list
+- [ ] UI
+    - [ ] Format byte (1KB -> 1MB -> 1GB)
+    - [ ] barchart
+    - [ ] preserve previous command outputs (same behaviour as less command)
+    - [ ] implement keybinds
+        - [ ] stop updating progresses
+        - [ ] quit
+- [ ] fix golint warnings
+- [ ] Remove json_printer
+- [ ] Fix approximate counting algorithm
+- [ ] demo data
+    - [ ] larger demo data
+    - [ ] implement dummy data generator in Go
+- [ ] enhancement
+    - [ ] Add tuple counter (`-s` separator option)
