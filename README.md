@@ -41,6 +41,8 @@ bash ./test/test_scount.sh
 - [ ] UI
     - [ ] Format byte (1KB -> 1MB -> 1GB)
     - [ ] barchart
+        - [ ] character barchart
+        - [ ] output progresses as JSON and plot barchart using d3.js
     - [ ] preserve previous command outputs (same behaviour as less command)
     - [ ] implement keybinds
         - [ ] stop updating progresses
