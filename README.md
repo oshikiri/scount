@@ -1,7 +1,7 @@
 scount: a CLI streaming counter written in Go
 ==========
 
-[![Build Status](https://travis-ci.org/oshikiri/scount.svg?branch=master)](https://travis-ci.org/oshikiri/scount)
+[![Build Status](https://travis-ci.org/oshikiri/scount.svg?branch=master)](https://travis-ci.org/oshikiri/scount) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount)
 
 ![demo animation: approximate count using text8](demo/demo-text8-approximate-count.gif)
 
