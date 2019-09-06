@@ -25,11 +25,10 @@ jobs:
         fi
 
     - name: Build
-      run: |
-        go build -v .
+      run: go build -v .
 
     - name: Test
       run: |
         go test
-        export PATH=$PATH:$HOME/go/bin
+        export PATH=$PATH:$HOME/gopath/src/github.com/oshikiri/scount/bin/
         bash ./test/test_scount.bash
