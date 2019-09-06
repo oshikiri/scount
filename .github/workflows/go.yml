@@ -23,10 +23,12 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+        go get -u golang.org/x/lint/golint
+        export PATH=$PATH:$HOME/go/bin
+
 
     - name: Format and lint
       run: |
-        go get -u golang.org/x/lint/golint
         diff -u <(echo -n) <(gofmt -d -s .)
         diff -u <(echo -n) <(golint ./...)
 
@@ -38,6 +40,5 @@ jobs:
 
     - name: e2e test
       run: |
-        export PATH=$PATH:$HOME/go/bin
         go install -v .
         bash ./test/test_scount.bash
