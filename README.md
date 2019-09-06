@@ -30,11 +30,7 @@ Usage of scount:
 
 ## Testing
 ```sh
-# unit testing
 go test
-
-# testing command line interface
-bash ./test/test_scount.sh
 ```
 
 ## TODO list
