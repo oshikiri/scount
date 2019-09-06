@@ -30,4 +30,4 @@ jobs:
     - name: Test
       run: |
         go test
-        bash ./test/test_scount.sh
+        bash ./test/test_scount.bash
