@@ -28,8 +28,10 @@ jobs:
       run: go build -v .
 
     - name: Test
+      run: go test
+
+    - name: e2e test
       run: |
-        go test
-        pwd
-        export PATH=$PATH:$HOME/gopath/src/github.com/oshikiri/scount/bin/
+        export PATH=$PATH:$HOME/go/bin
+        go install -v .
         bash ./test/test_scount.bash
