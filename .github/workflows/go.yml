@@ -1,5 +1,5 @@
 name: Go
-on: [push]
+on: [push, pull_request]
 jobs:
 
   build:
@@ -24,21 +24,13 @@ jobs:
             dep ensure
         fi
         go get -u golang.org/x/lint/golint
-        export PATH=$PATH:$HOME/go/bin
 
-
-    - name: Format and lint
+    - name: Build and Test
       run: |
+        export PATH=$PATH:$HOME/go/bin
         diff -u <(echo -n) <(gofmt -d -s .)
         diff -u <(echo -n) <(golint ./...)
-
-    - name: Build
-      run: go build -v .
-
-    - name: Test
-      run: go test
-
-    - name: e2e test
-      run: |
+        go build -v .
+        go test
         go install -v .
         bash ./test/test_scount.bash
