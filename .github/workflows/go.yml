@@ -24,6 +24,12 @@ jobs:
             dep ensure
         fi
 
+    - name: Format and lint
+      run: |
+      go get -u golang.org/x/lint/golint
+      diff -u <(echo -n) <(gofmt -d -s .)
+      diff -u <(echo -n) <(golint ./...)
+
     - name: Build
       run: go build -v .
 
