@@ -30,5 +30,6 @@ jobs:
     - name: Test
       run: |
         go test
+        pwd
         export PATH=$PATH:$HOME/gopath/src/github.com/oshikiri/scount/bin/
         bash ./test/test_scount.bash
