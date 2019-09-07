@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"code.cloudfoundry.org/bytefmt"
 	"github.com/olekukonko/tablewriter"
 )
 
@@ -50,7 +51,8 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		printer.table.Append([]string{c.key, strconv.Itoa(c.value + countBase)})
 	}
 
-	caption := fmt.Sprintf("Bytes: %v, Chunks: %v", nBytes, nChunks)
+	byteSize := bytefmt.ByteSize(uint64(nBytes))
+	caption := fmt.Sprintf("Read: %v", byteSize)
 	printer.table.SetCaption(true, caption)
 
 	printer.table.Render()

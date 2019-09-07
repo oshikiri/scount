@@ -35,7 +35,7 @@ go test
 
 ## TODO list
 - [ ] UI
-    - [ ] Format byte (1KB -> 1MB -> 1GB)
+    - [x] Format byte (1KB -> 1MB -> 1GB)
     - [ ] barchart
         - [ ] character barchart
         - [ ] output progresses as JSON and plot barchart using d3.js
