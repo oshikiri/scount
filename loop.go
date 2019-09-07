@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func loop(separator string, approximateCounting bool, theta float64, topnPrint int, flushMilliSec int64, useJSONPrinter bool) {
+func loop(separator string, approximateCounting bool, theta float64, topnPrint int, flushMilliSec int64) {
 	nBytes, nChunks := int64(0), int64(0)
 	reader := bufio.NewReader(os.Stdin)
 	buf := make([]byte, 0, 4*1024)
@@ -21,12 +21,7 @@ func loop(separator string, approximateCounting bool, theta float64, topnPrint i
 		counter = NewMapCounter()
 	}
 
-	var printer Printer
-	if !useJSONPrinter {
-		printer = NewTablePrinter(flushMilliSec, topnPrint)
-	} else {
-		printer = NewJSONPrinter(flushMilliSec, topnPrint)
-	}
+	printer := NewTablePrinter(flushMilliSec, topnPrint)
 
 	previousTail := ""
 	for {

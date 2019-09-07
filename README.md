@@ -44,7 +44,7 @@ go test
         - [ ] stop updating progresses
         - [ ] quit
 - [ ] fix golint warnings
-- [ ] Remove json_printer
+- [x] Remove json_printer
 - [ ] Fix approximate counting algorithm
 - [ ] demo data
     - [ ] larger demo data

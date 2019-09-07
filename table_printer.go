@@ -25,7 +25,6 @@ type TablePrinter struct {
 	topnPrint           int
 	lastFlushedDatetime time.Time
 	table               tablewriter.Table
-	Printer
 }
 
 func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64, forcePrint bool) {
