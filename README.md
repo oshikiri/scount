@@ -34,20 +34,20 @@ go test
 ```
 
 ## TODO list
-- [ ] UI
+- UI
     - [x] Format byte (1KB -> 1MB -> 1GB)
-    - [ ] barchart
-        - [ ] character barchart
-        - [ ] output progresses as JSON and plot barchart using d3.js
+    - [ ] Add thousands separators
     - [ ] preserve previous command outputs (same behaviour as less command)
-    - [ ] implement keybinds
-        - [ ] stop updating progresses
-        - [ ] quit
-- [ ] fix golint warnings
-- [x] Remove json_printer
-- [ ] Fix approximate counting algorithm
-- [ ] demo data
-    - [ ] larger demo data
-    - [ ] implement dummy data generator in Go
-- [ ] enhancement
+    - [ ] character barchart
+    - implement keybinds
+        - [ ] <kbd>p</kbd> pause updating progresses
+        - [ ] <kbd>q</kbd> quit
+        - [ ] cursor
+    - [ ] Add quiet option `-q`
+    - [x] Remove json_printer
+- counting algorithm
+    - [ ] Fix approximate counting algorithm
+    - [ ] Add larger demo data
+- enhancement
     - [ ] Add tuple counter (`-s` separator option)
+    - [ ] output progresses as JSON and plot barchart using d3.js
