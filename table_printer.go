@@ -5,6 +5,7 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"strings"
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
@@ -24,7 +25,6 @@ type TablePrinter struct {
 	flushMilliSec       int64
 	topnPrint           int
 	lastFlushedDatetime time.Time
-	table               tablewriter.Table
 }
 
 func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64, forcePrint bool) {
@@ -34,27 +34,29 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		return
 	}
 
-	printer.table.SetHeader([]string{"Name", "Count"})
+	tableStringBuilder := &strings.Builder{}
+	table := tablewriter.NewWriter(tableStringBuilder)
+	table.SetHeader([]string{"Name", "Count"})
 	counts, countBase := counter.getCountingResult()
 	sorted := sortMap(counts)
 	end := Min(len(sorted), printer.topnPrint)
 
 	ClearTerminal := "\033c"
 	fmt.Fprint(os.Stderr, ClearTerminal)
-	printer.table.ClearRows()
 
 	for i, c := range sorted {
 		if i >= end {
 			break
 		}
-		printer.table.Append([]string{c.key, strconv.Itoa(c.value + countBase)})
+		table.Append([]string{c.key, strconv.Itoa(c.value + countBase)})
 	}
 
 	byteSize := bytefmt.ByteSize(uint64(nBytes))
 	caption := fmt.Sprintf("Read: %v", byteSize)
-	printer.table.SetCaption(true, caption)
+	table.SetCaption(true, caption)
 
-	printer.table.Render()
+	table.Render()
+	fmt.Fprintf(os.Stderr, tableStringBuilder.String())
 	printer.lastFlushedDatetime = currentDatetime
 }
 
@@ -65,13 +67,10 @@ func (printer *TablePrinter) exit(counter Counter) {
 
 // NewTablePrinter is a utility
 func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
-	table := tablewriter.NewWriter(os.Stderr)
-
 	printer := &TablePrinter{}
 	printer.lastFlushedDatetime = time.Now()
 	printer.flushMilliSec = flushMilliSec
 	printer.topnPrint = topnPrint
-	printer.table = *table
 	return printer
 }
 
