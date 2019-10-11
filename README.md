@@ -8,6 +8,7 @@ scount: a CLI streaming counter written in Go
 
 ## Installation
 ```sh
+go get github.com/oshikiri/scount
 go install github.com/oshikiri/scount
 ```
 
