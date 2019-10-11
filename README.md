@@ -1,5 +1,7 @@
-scount: a CLI streaming counter written in Go
+scount: a commend-line streaming counter with rich progress report
 ==========
+
+You can use it instead of `sort | uniq -c`.
 
 [![Build Status](https://github.com/oshikiri/scount/workflows/Go/badge.svg)](https://github.com/oshikiri/scount/actions) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount)
 
