@@ -44,7 +44,7 @@ go test
 
 ## TODO list
 - UI
-    - [x] Format byte (1KB -> 1MB -> 1GB)
+    - [x] ~~Format byte (1KB -> 1MB -> 1GB)~~
     - [ ] Add thousands separators
     - [ ] preserve previous command outputs (same behaviour as less command)
     - [ ] character barchart
@@ -53,7 +53,7 @@ go test
         - [ ] <kbd>q</kbd> quit
         - [ ] cursor
     - [ ] Add quiet option `-q`
-    - [x] Remove json_printer
+    - [x] ~~Remove json_printer~~
 - counting algorithm
     - [ ] Fix approximate counting algorithm
     - [ ] Add larger demo data
