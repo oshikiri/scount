@@ -26,6 +26,7 @@ Usage of scount:
         Flush counting progress every X [msec] (default 100)
   -n int
         Print the top N items (default 10)
+  -q    Quiet mode
   -t float
         theta of KSP algorithm (default 1e-05)
 ```
