@@ -31,6 +31,12 @@ Usage of scount:
 ```
 
 
+## Build
+```sh
+go build
+```
+
+
 ## Testing
 ```sh
 go test
