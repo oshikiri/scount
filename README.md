@@ -48,8 +48,7 @@ go test
     - [x] ~~Format byte (1KB -> 1MB -> 1GB)~~
     - [ ] Add thousands separators
     - [ ] preserve previous command outputs (same behaviour as less command)
-    - [ ] character barchart
-    - implement keybinds
+    - [ ] implement keybinds
         - [ ] <kbd>p</kbd> pause updating progresses
         - [ ] <kbd>q</kbd> quit
         - [ ] cursor
@@ -60,4 +59,6 @@ go test
     - [ ] Add larger demo data
 - enhancement
     - [ ] Add tuple counter (`-s` separator option)
-    - [ ] output progresses as JSON and plot barchart using d3.js
+    - barchart
+        - [ ] character barchart
+        - [ ] output progresses as JSON and plot barchart using d3.js
