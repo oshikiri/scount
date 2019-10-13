@@ -52,7 +52,7 @@ go test
         - [ ] <kbd>p</kbd> pause updating progresses
         - [ ] <kbd>q</kbd> quit
         - [ ] cursor
-    - [ ] Add quiet option `-q`
+    - [x] ~~Add quiet option `-q`~~
     - [x] Remove json_printer
 - counting algorithm
     - [ ] Fix approximate counting algorithm
