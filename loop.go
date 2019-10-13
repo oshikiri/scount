@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func loop(separator string, approximateCounting bool, theta float64, topnPrint int, flushMilliSec int64, quietMode bool) {
+func loop(approximateCounting bool, theta float64, topnPrint int, flushMilliSec int64, quietMode bool) {
 	nBytes, nChunks := int64(0), int64(0)
 	reader := bufio.NewReader(os.Stdin)
 	buf := make([]byte, 0, 4*1024)
