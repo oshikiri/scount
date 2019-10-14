@@ -51,7 +51,7 @@ go test
 ## TODO list
 - UI
     - [x] ~~Format byte (1KB -> 1MB -> 1GB)~~
-    - [ ] Add thousands separators
+    - [x] ~~Add thousands separators~~
     - [ ] preserve previous command outputs (same behaviour as less command)
     - [ ] implement keybinds
         - [ ] <kbd>p</kbd> pause updating progresses

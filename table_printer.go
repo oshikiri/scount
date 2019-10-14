@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
 	"github.com/olekukonko/tablewriter"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // Min returns the smaller of x or y.
@@ -44,11 +45,14 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	ClearTerminal := "\033c"
 	fmt.Fprint(os.Stderr, ClearTerminal)
 
+	formatter := message.NewPrinter(language.English)
+
 	for i, c := range sorted {
 		if i >= end {
 			break
 		}
-		table.Append([]string{c.key, strconv.Itoa(c.value + countBase)})
+		count := formatter.Sprintf("%d", c.value+countBase)
+		table.Append([]string{c.key, count})
 	}
 
 	byteSize := bytefmt.ByteSize(uint64(nBytes))
