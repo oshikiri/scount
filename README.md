@@ -1,9 +1,14 @@
 scount: a commend-line streaming counter with rich progress report
 ==========
 
+[![Build Status](https://github.com/oshikiri/scount/workflows/Go/badge.svg)](https://github.com/oshikiri/scount/actions) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount)
+
+
 You can use it instead of `sort | uniq -c`.
 
-[![Build Status](https://github.com/oshikiri/scount/workflows/Go/badge.svg)](https://github.com/oshikiri/scount/actions) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount)
+```shell
+cat ./demo/text8 | tr ' ' '\n' | scount -a | jq .the
+```
 
 ![demo animation: approximate count using text8](demo/demo-text8-approximate-count.gif)
 
