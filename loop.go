@@ -8,15 +8,14 @@ import (
 	"strings"
 )
 
-func loop(approximateCounting bool, theta float64, topnPrint int, flushMilliSec int64, quietMode bool) {
+func loop(approximateCounting bool, epsilon float64, support float64, topnPrint int, flushMilliSec int64, quietMode bool) {
 	nBytes, nChunks := int64(0), int64(0)
 	reader := bufio.NewReader(os.Stdin)
 	buf := make([]byte, 0, 4*1024)
-	var approximateCountingThreshold = 1.0 / theta
 
 	var counter Counter
 	if approximateCounting {
-		counter = NewApproximateCounter(approximateCountingThreshold)
+		counter = NewApproximateCounter(epsilon, support)
 	} else {
 		counter = NewMapCounter()
 	}

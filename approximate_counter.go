@@ -4,73 +4,95 @@ import "encoding/json"
 
 // ApproximateCounter is a counter using streaming counting algorithm
 //
-// One path KSP algorithm [KSP2003]
-// countThreshold = 1/theta
+// Lossy counting algorithm [Manku-Motwani2002]
+// sizeBucket = 1 / epsilon
 //
-// [KSP2003] Richard M. Karp, Scott Shenker, and Christos H. Papadimitriou. 2003.
-//   A simple algorithm for finding frequent elements in streams and bags.
-//   ACM Trans. Database Syst. 28, 1 (March 2003), 51-55.
-//   DOI=http://dx.doi.org/10.1145/762471.762473
+// [Manku-Motwani2002]:
+//   Gurmeet Singh Manku & Rajeev Motwani. (2002)
+//   Approximate Frequency Counts over Data Streams.
+//   VLDB'02, 346 - 357.
+//   http://dl.acm.org/citation.cfm?id=1287400
 type ApproximateCounter struct {
-	counts         map[string]int
-	countThreshold float64
-	nSubtracted    int
-	nPassed        int
+	counts           map[string]int
+	errors           map[string]int
+	epsilon          float64
+	supportThreshold float64
+	iBucket          int
+	iIncrement       int
+	sizeBucket       int
 	Counter
 }
 
-func (counter *ApproximateCounter) getCountingResult() (map[string]int, int) {
-	return counter.counts, counter.nSubtracted
+func (counter ApproximateCounter) getCountingResult() (map[string]int, int) {
+	return counter.counts, 0
 }
 
 func (counter *ApproximateCounter) initialize() {
-	counter.nPassed = 0
-	counter.nSubtracted = 0
-	counter.counts = map[string]int{}
+	counter.counts = make(map[string]int, counter.sizeBucket)
+	counter.errors = make(map[string]int, counter.sizeBucket)
 }
 
-func (counter ApproximateCounter) increment(item string) int {
-	counter.nPassed++
-
-	// addition step
-	v, ok := counter.counts[item]
-	if ok {
-		counter.counts[item] = v + 1
-	} else {
-		counter.counts[item] = 1
-	}
-
-	// deletion step
-	if float64(len(counter.counts)) > counter.countThreshold {
-		counter.nSubtracted++
-		for k, v := range counter.counts {
-			if v > 1 {
-				counter.counts[k] = v - 1
-			} else {
-				delete(counter.counts, k)
-			}
+func (counter *ApproximateCounter) truncateNegligibleItems() {
+	for k := range counter.counts {
+		if counter.counts[k]+counter.errors[k] <= counter.iBucket {
+			delete(counter.counts, k)
+			delete(counter.errors, k)
 		}
 	}
+	counter.iBucket++
+}
 
-	return counter.counts[item] + counter.nSubtracted
+func (counter *ApproximateCounter) truncateBySupport() {
+	for k := range counter.counts {
+		if float64(counter.counts[k]) < (counter.supportThreshold-counter.epsilon)*float64(counter.iIncrement) {
+			delete(counter.counts, k)
+			delete(counter.errors, k)
+		}
+	}
+}
+
+func (counter *ApproximateCounter) increment(item string) int {
+	counter.iIncrement++
+
+	_, itemExists := counter.counts[item]
+	if itemExists {
+		counter.counts[item]++
+	} else {
+		counter.counts[item] = 1
+		counter.errors[item] = counter.iBucket - 1
+	}
+
+	if counter.iIncrement%counter.sizeBucket == 0 {
+		counter.truncateNegligibleItems()
+	}
+
+	return counter.counts[item]
 }
 
 func (counter ApproximateCounter) get(item string) int {
-	return counter.counts[item] + counter.nSubtracted // WARN: is it appropriate?
+	c, exists := counter.counts[item]
+	if exists {
+		return c + counter.errors[item]
+	}
+	return 0
 }
 
 func (counter ApproximateCounter) toJSON() string {
 	for k, v := range counter.counts {
-		counter.counts[k] = v + counter.nSubtracted // WARN: is it appropriate?
+		counter.counts[k] = v + counter.errors[k]
 	}
 	s, _ := json.Marshal(counter.counts)
 	return string(s)
 }
 
 // NewApproximateCounter constructs ApproximateCounter struct
-func NewApproximateCounter(countThreshold float64) *ApproximateCounter {
+func NewApproximateCounter(epsilon float64, supportThreshold float64) *ApproximateCounter {
 	counter := &ApproximateCounter{}
-	counter.countThreshold = countThreshold
+	counter.iBucket = 1
+	counter.iIncrement = 0
+	counter.supportThreshold = supportThreshold
+	counter.epsilon = epsilon
+	counter.sizeBucket = int(1.0 / epsilon)
 	counter.initialize()
 	return counter
 }

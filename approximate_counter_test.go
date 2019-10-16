@@ -3,7 +3,7 @@ package main
 import "testing"
 
 func TestApproximateCounterDoNotExist(t *testing.T) {
-	counter := NewApproximateCounter(0.5)
+	counter := NewApproximateCounter(0.1, 0.1)
 	got := counter.get("do_not_exist")
 	if got != 0 {
 		t.Errorf("counter.get(do_not_exist) != 0")
@@ -11,47 +11,61 @@ func TestApproximateCounterDoNotExist(t *testing.T) {
 }
 
 func TestApproximateCounterExist(t *testing.T) {
-	counter := NewApproximateCounter(2)
+	counter := NewApproximateCounter(0.1, 0.1)
 
-	counter.increment("bob")
-	counter.increment("bob")
-	counter.increment("bob")
+	counter.increment("bbb")
+	counter.increment("bbb")
+	counter.increment("bbb")
 
-	got := counter.get("bob")
+	got := counter.get("bbb")
 	if got != 3 {
-		t.Errorf("counter.get(bob) != 3")
+		t.Errorf("counter.get(bbb) != 3")
 	}
 }
 
-func assertBobCount(t *testing.T, expected int, actual int) {
+func assertCount(t *testing.T, counter Counter, item string, expected int) {
+	actual := counter.get(item)
 	if actual != expected {
-		t.Errorf("counter.get(bob) != %v, got %v", expected, actual)
+		t.Errorf("counter.get(%v) != %v, got %v", item, expected, actual)
 	}
 }
 func TestApproximateCounterExistWhenOverflow(t *testing.T) {
-	counter := NewApproximateCounter(2)
+	counter := NewApproximateCounter(0.1, 0.2)
 
-	for i := 0; i < 100; i++ {
-		counter.increment("bob")
-	}
+	counter.increment("aaa") // iIncrement = 1
 
-	counter.increment("alice1") // added
-	assertBobCount(t, 100, counter.get("bob"))
-	counter.increment("alice2") // added and then deleted
-	assertBobCount(t, 99, counter.get("bob"))
-	counter.increment("alice3") // added
-	assertBobCount(t, 99, counter.get("bob"))
+	assertCount(t, counter, "aaa", 1)
+
+	for i := 2; i < 10; i++ {
+		counter.increment("bbb")
+	} // iIncrement = 9
+
+	assertCount(t, counter, "aaa", 1)
+	assertCount(t, counter, "bbb", 8)
+
+	counter.increment("bbb") // iIncrement = 9
+
+	assertCount(t, counter, "aaa", 0)
+	assertCount(t, counter, "bbb", 9)
+
+	counter.increment("aaa") // iIncrement = 10
+
+	// count = 1, error = 1, count + error = 2
+	assertCount(t, counter, "aaa", 2)
+
+	counter.truncateBySupport()
+	assertCount(t, counter, "aaa", 0)
 }
 
 func TestApproximateCounterToJson(t *testing.T) {
-	counter := NewApproximateCounter(2)
+	counter := NewApproximateCounter(0.01, 0.01)
 
-	counter.increment("alice")
-	counter.increment("bob")
-	counter.increment("bob")
+	counter.increment("aaa")
+	counter.increment("bbb")
+	counter.increment("bbb")
 
 	got := counter.toJSON()
-	if got != "{\"alice\":1,\"bob\":2}" {
+	if got != "{\"aaa\":1,\"bbb\":2}" {
 		t.Errorf("Unexpected json: %v", got)
 	}
 }
