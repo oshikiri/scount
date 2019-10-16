@@ -27,13 +27,15 @@ and then add `~/go/bin` to `$PATH`.
 $ scount -h
 Usage of scount:
   -a    Use approximate counting algorithm (default is naive counting)
+  -e float
+        Epsilon of lossy counting algorithm (default 1e-05)
   -f int
-        Flush counting progress every X [msec] (default 100)
+        Flush counting progress every X [msec] (default 200)
   -n int
         Print the top N items (default 10)
-  -q    Quiet mode
-  -t float
-        theta of KSP algorithm (default 1e-05)
+  -q    Turn on quiet mode
+  -s float
+        Support of lossy counting algorithm (default 2e-05)
 ```
 
 
@@ -60,7 +62,7 @@ go test
     - [x] ~~Add quiet option `-q`~~
     - [x] ~~Remove json_printer~~
 - counting algorithm
-    - [ ] Fix approximate counting algorithm
+    - [x] ~~Fix approximate counting algorithm~~
     - [ ] Add larger demo data
 - enhancement
     - [ ] Add tuple counter (`-s` separator option)
