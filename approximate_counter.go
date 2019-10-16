@@ -23,8 +23,8 @@ type ApproximateCounter struct {
 	Counter
 }
 
-func (counter ApproximateCounter) getCountingResult() (map[string]int, int) {
-	return counter.counts, 0
+func (counter ApproximateCounter) getCountingResult() map[string]int {
+	return counter.counts
 }
 
 func (counter *ApproximateCounter) initialize() {

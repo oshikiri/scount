@@ -10,8 +10,8 @@ type MapCounter struct {
 	Counter
 }
 
-func (counter *MapCounter) getCountingResult() (map[string]int, int) {
-	return counter.counts, 0
+func (counter *MapCounter) getCountingResult() map[string]int {
+	return counter.counts
 }
 
 func (counter *MapCounter) initialize() {

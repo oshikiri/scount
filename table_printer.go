@@ -38,7 +38,7 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	tableStringBuilder := &strings.Builder{}
 	table := tablewriter.NewWriter(tableStringBuilder)
 	table.SetHeader([]string{"Name", "Count"})
-	counts, countBase := counter.getCountingResult()
+	counts := counter.getCountingResult()
 	sorted := sortMap(counts)
 	end := Min(len(sorted), printer.topnPrint)
 
@@ -51,7 +51,7 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		if i >= end {
 			break
 		}
-		count := formatter.Sprintf("%d", c.value+countBase)
+		count := formatter.Sprintf("%d", c.value)
 		table.Append([]string{c.key, count})
 	}
 
