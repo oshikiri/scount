@@ -5,7 +5,7 @@ import "encoding/json"
 // ApproximateCounter is a counter using streaming counting algorithm
 //
 // Lossy counting algorithm [Manku-Motwani2002]
-// sizeBucket = 1 / epsilon
+// bucketSize = 1 / epsilon
 //
 // [Manku-Motwani2002]:
 //   Gurmeet Singh Manku & Rajeev Motwani. (2002)
@@ -18,8 +18,8 @@ type ApproximateCounter struct {
 	epsilon          float64
 	supportThreshold float64
 	iBucket          int
-	iIncrement       int
-	sizeBucket       int
+	iItem            int
+	bucketSize       int
 	Counter
 }
 
@@ -28,8 +28,8 @@ func (counter ApproximateCounter) getCountingResult() (map[string]int, int) {
 }
 
 func (counter *ApproximateCounter) initialize() {
-	counter.counts = make(map[string]int, counter.sizeBucket)
-	counter.errors = make(map[string]int, counter.sizeBucket)
+	counter.counts = make(map[string]int, counter.bucketSize)
+	counter.errors = make(map[string]int, counter.bucketSize)
 }
 
 func (counter *ApproximateCounter) truncateNegligibleItems() {
@@ -44,7 +44,7 @@ func (counter *ApproximateCounter) truncateNegligibleItems() {
 
 func (counter *ApproximateCounter) truncateBySupport() {
 	for k := range counter.counts {
-		if float64(counter.counts[k]) < (counter.supportThreshold-counter.epsilon)*float64(counter.iIncrement) {
+		if float64(counter.counts[k]) < (counter.supportThreshold-counter.epsilon)*float64(counter.iItem) {
 			delete(counter.counts, k)
 			delete(counter.errors, k)
 		}
@@ -52,7 +52,7 @@ func (counter *ApproximateCounter) truncateBySupport() {
 }
 
 func (counter *ApproximateCounter) increment(item string) int {
-	counter.iIncrement++
+	counter.iItem++
 
 	_, itemExists := counter.counts[item]
 	if itemExists {
@@ -62,7 +62,7 @@ func (counter *ApproximateCounter) increment(item string) int {
 		counter.errors[item] = counter.iBucket - 1
 	}
 
-	if counter.iIncrement%counter.sizeBucket == 0 {
+	if counter.iItem%counter.bucketSize == 0 {
 		counter.truncateNegligibleItems()
 	}
 
@@ -89,10 +89,10 @@ func (counter ApproximateCounter) toJSON() string {
 func NewApproximateCounter(epsilon float64, supportThreshold float64) *ApproximateCounter {
 	counter := &ApproximateCounter{}
 	counter.iBucket = 1
-	counter.iIncrement = 0
+	counter.iItem = 0
 	counter.supportThreshold = supportThreshold
 	counter.epsilon = epsilon
-	counter.sizeBucket = int(1.0 / epsilon)
+	counter.bucketSize = int(1.0 / epsilon)
 	counter.initialize()
 	return counter
 }
