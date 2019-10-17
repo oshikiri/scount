@@ -1,14 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"sort"
-	"strings"
+
+	"text/tabwriter"
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
-	"github.com/olekukonko/tablewriter"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
@@ -21,7 +22,7 @@ func Min(x, y int) int {
 	return x
 }
 
-// TablePrinter is a printer of Counter object by tablewriter package
+// TablePrinter is a printer of Counter object
 type TablePrinter struct {
 	flushMilliSec       int64
 	topnPrint           int
@@ -35,9 +36,9 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		return
 	}
 
-	tableStringBuilder := &strings.Builder{}
-	table := tablewriter.NewWriter(tableStringBuilder)
-	table.SetHeader([]string{"Name", "Count"})
+	var buffer bytes.Buffer
+	writer := tabwriter.NewWriter(&buffer, 0, 0, 2, ' ', tabwriter.Debug)
+
 	counts := counter.getCountingResult()
 	sorted := sortMap(counts)
 	end := Min(len(sorted), printer.topnPrint)
@@ -46,21 +47,26 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	fmt.Fprint(os.Stderr, ClearTerminal)
 
 	formatter := message.NewPrinter(language.English)
+	maxCountLength := len(formatter.Sprintf("%v", sorted[0].value))
+	countFormat := formatter.Sprintf("%%%dv", maxCountLength+1)
 
 	for i, c := range sorted {
 		if i >= end {
 			break
 		}
-		count := formatter.Sprintf("%d", c.value)
-		table.Append([]string{c.key, count})
+		count := formatter.Sprintf(countFormat, c.value)
+		line := fmt.Sprintf("%v\t%v\n", c.key, count)
+		writer.Write([]byte(line))
 	}
+	writer.Flush()
 
 	byteSize := bytefmt.ByteSize(uint64(nBytes))
 	caption := fmt.Sprintf("Read: %v", byteSize)
-	table.SetCaption(true, caption)
 
-	table.Render()
-	fmt.Fprintf(os.Stderr, tableStringBuilder.String())
+	s := buffer.String()
+	fmt.Fprintf(os.Stderr, s)
+	fmt.Fprintf(os.Stderr, caption)
+
 	printer.lastFlushedDatetime = currentDatetime
 }
 
