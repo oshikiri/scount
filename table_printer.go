@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"code.cloudfoundry.org/bytefmt"
+	"github.com/gdamore/tcell"
+	"github.com/gdamore/tcell/encoding"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
@@ -27,9 +29,12 @@ type TablePrinter struct {
 	flushMilliSec       int64
 	topnPrint           int
 	lastFlushedDatetime time.Time
+	tscreen             tcell.Screen
 }
 
 func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64, forcePrint bool) {
+	printer.tscreen.Clear()
+
 	currentDatetime := time.Now()
 	diff := currentDatetime.Sub(printer.lastFlushedDatetime)
 	if !forcePrint && diff.Nanoseconds() < 1000*1000*printer.flushMilliSec {
@@ -43,9 +48,6 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	sorted := sortMap(counts)
 	end := Min(len(sorted), printer.topnPrint)
 
-	ClearTerminal := "\033c"
-	fmt.Fprint(os.Stderr, ClearTerminal)
-
 	formatter := message.NewPrinter(language.English)
 	maxCountLength := len(formatter.Sprintf("%v", sorted[0].value))
 	countFormat := formatter.Sprintf("%%%dv", maxCountLength+1)
@@ -55,24 +57,36 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 			break
 		}
 		count := formatter.Sprintf(countFormat, c.value)
-		line := fmt.Sprintf("%v\t%v\n", c.key, count)
+		line := fmt.Sprintf(" %v\t%v\n", c.key, count)
 		writer.Write([]byte(line))
 	}
-	writer.Flush()
 
 	byteSize := bytefmt.ByteSize(uint64(nBytes))
 	caption := fmt.Sprintf("Read: %v", byteSize)
+	writer.Write([]byte(caption))
+
+	writer.Flush()
 
 	s := buffer.String()
-	fmt.Fprintf(os.Stderr, s)
-	fmt.Fprintf(os.Stderr, caption)
+	runes := []rune(s)
+	x := 0
+	y := 0
+	for _, r := range runes {
+		if r != '\n' {
+			printer.tscreen.SetCell(x, y, tcell.StyleDefault, r)
+			x++
+		} else {
+			x = 0
+			y++
+		}
+	}
+	printer.tscreen.Show()
 
 	printer.lastFlushedDatetime = currentDatetime
 }
 
 func (printer *TablePrinter) exit(counter Counter) {
-	fmt.Fprintf(os.Stderr, "\n")
-	fmt.Fprintf(os.Stdout, counter.toJSON())
+	printer.tscreen.Fini()
 }
 
 // NewTablePrinter is a utility
@@ -81,6 +95,19 @@ func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
 	printer.lastFlushedDatetime = time.Now()
 	printer.flushMilliSec = flushMilliSec
 	printer.topnPrint = topnPrint
+
+	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
+	printer.tscreen, _ = tcell.NewScreen()
+	if err := printer.tscreen.Init(); err != nil {
+		fmt.Fprintf(os.Stderr, "%v\n", err)
+		os.Exit(1)
+	}
+	encoding.Register()
+
+	printer.tscreen.SetStyle(tcell.StyleDefault)
+	printer.tscreen.Clear()
+	printer.tscreen.Show()
+
 	return printer
 }
 
