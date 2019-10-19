@@ -63,7 +63,7 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	writer.Write([]byte(createCaption(nBytes)))
 	writer.Flush()
 
-	printer.printOnTscreen(buffer.String(), currentDatetime)
+	printer.printOnTscreen(buffer.String())
 	printer.lastFlushedDatetime = currentDatetime
 }
 
