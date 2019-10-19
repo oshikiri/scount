@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"sort"
 
 	"text/tabwriter"
 	"time"
@@ -15,14 +14,6 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
-
-// Min returns the smaller of x or y
-func Min(x, y int) int {
-	if x > y {
-		return y
-	}
-	return x
-}
 
 // TablePrinter is a printer of Counter object
 type TablePrinter struct {
@@ -117,39 +108,4 @@ func createCaption(nBytes int64, nItems uint64) string {
 	counterSizeString := bytefmt.ByteSize(nItems)
 	caption := fmt.Sprintf("Read: %v, size of counter: %v", byteSize, counterSizeString)
 	return caption
-}
-
-func sortMap(m map[string]int) List {
-	list := List{}
-	for k, v := range m {
-		entry := Entry{k, v}
-		list = append(list, entry)
-	}
-
-	sort.Sort(sort.Reverse(list))
-	return list
-}
-
-// Entry is key-value pair to sort
-type Entry struct {
-	key   string
-	value int
-}
-
-// List for sorting
-type List []Entry
-
-func (l List) Len() int {
-	return len(l)
-}
-
-func (l List) Swap(i, j int) {
-	l[i], l[j] = l[j], l[i]
-}
-
-func (l List) Less(i, j int) bool {
-	if l[i].value == l[j].value {
-		return (l[i].key < l[j].key)
-	}
-	return (l[i].value < l[j].value)
 }
