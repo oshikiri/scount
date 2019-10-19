@@ -54,7 +54,7 @@ go test
 - UI
     - [x] ~~Format byte (1KB -> 1MB -> 1GB)~~
     - [x] ~~Add thousands separators~~
-    - [ ] preserve previous command outputs (same behaviour as less command)
+    - [x] ~~preserve previous command outputs (same behaviour as less command)~~
     - [ ] implement keybinds
         - [ ] <kbd>p</kbd> pause updating progresses
         - [ ] <kbd>q</kbd> quit

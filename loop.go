@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -20,7 +21,10 @@ func loop(approximateCounting bool, epsilon float64, support float64, topnPrint 
 		counter = NewMapCounter()
 	}
 
-	printer := NewTablePrinter(flushMilliSec, topnPrint)
+	var printer *TablePrinter
+	if !quietMode {
+		printer = NewTablePrinter(flushMilliSec, topnPrint)
+	}
 
 	previousTail := ""
 	for {
@@ -63,7 +67,8 @@ func loop(approximateCounting bool, epsilon float64, support float64, topnPrint 
 	}
 
 	if !quietMode {
-		printer.print(counter, nBytes, nChunks, true)
+		printer.exit(counter)
 	}
-	printer.exit(counter)
+
+	fmt.Fprintf(os.Stdout, counter.toJSON())
 }
