@@ -16,7 +16,7 @@ import (
 	"golang.org/x/text/message"
 )
 
-// Min returns the smaller of x or y.
+// Min returns the smaller of x or y
 func Min(x, y int) int {
 	if x > y {
 		return y
@@ -36,8 +36,8 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	printer.tscreen.Clear()
 
 	currentDatetime := time.Now()
-	diff := currentDatetime.Sub(printer.lastFlushedDatetime)
-	if !forcePrint && diff.Nanoseconds() < 1000*1000*printer.flushMilliSec {
+	elapsedNanoSecondsAfterFlushed := currentDatetime.Sub(printer.lastFlushedDatetime).Nanoseconds()
+	if !forcePrint && elapsedNanoSecondsAfterFlushed < 1000*1000*printer.flushMilliSec {
 		return
 	}
 
@@ -61,17 +61,14 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		writer.Write([]byte(line))
 	}
 
-	byteSize := bytefmt.ByteSize(uint64(nBytes))
-	caption := fmt.Sprintf("Read: %v", byteSize)
-	writer.Write([]byte(caption))
+	writer.Write([]byte(createCaption(nBytes)))
 
 	writer.Flush()
 
-	s := buffer.String()
-	runes := []rune(s)
 	x := 0
 	y := 0
-	for _, r := range runes {
+	content := buffer.String()
+	for _, r := range []rune(content) {
 		if r != '\n' {
 			printer.tscreen.SetCell(x, y, tcell.StyleDefault, r)
 			x++
@@ -89,13 +86,7 @@ func (printer *TablePrinter) exit(counter Counter) {
 	printer.tscreen.Fini()
 }
 
-// NewTablePrinter is a utility
-func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
-	printer := &TablePrinter{}
-	printer.lastFlushedDatetime = time.Now()
-	printer.flushMilliSec = flushMilliSec
-	printer.topnPrint = topnPrint
-
+func (printer *TablePrinter) initializeTscreen() {
 	tcell.SetEncodingFallback(tcell.EncodingFallbackASCII)
 	printer.tscreen, _ = tcell.NewScreen()
 	if err := printer.tscreen.Init(); err != nil {
@@ -107,19 +98,35 @@ func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
 	printer.tscreen.SetStyle(tcell.StyleDefault)
 	printer.tscreen.Clear()
 	printer.tscreen.Show()
+}
+
+// NewTablePrinter is a constructor of TablePrinter
+func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
+	printer := &TablePrinter{}
+
+	printer.lastFlushedDatetime = time.Now()
+	printer.flushMilliSec = flushMilliSec
+	printer.topnPrint = topnPrint
+	printer.initializeTscreen()
 
 	return printer
 }
 
+func createCaption(nBytes int64) string {
+	byteSize := bytefmt.ByteSize(uint64(nBytes))
+	caption := fmt.Sprintf("Read: %v", byteSize)
+	return caption
+}
+
 func sortMap(m map[string]int) List {
-	a := List{}
+	list := List{}
 	for k, v := range m {
-		e := Entry{k, v}
-		a = append(a, e)
+		entry := Entry{k, v}
+		list = append(list, entry)
 	}
 
-	sort.Sort(sort.Reverse(a))
-	return a
+	sort.Sort(sort.Reverse(list))
+	return list
 }
 
 // Entry is key-value pair to sort
@@ -128,7 +135,7 @@ type Entry struct {
 	value int
 }
 
-// List for sort
+// List for sorting
 type List []Entry
 
 func (l List) Len() int {
