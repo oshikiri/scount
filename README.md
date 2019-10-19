@@ -49,24 +49,3 @@ go build
 ```sh
 go test
 ```
-
-## TODO list
-- UI
-    - [x] ~~Format byte (1KB -> 1MB -> 1GB)~~
-    - [x] ~~Add thousands separators~~
-    - [x] ~~preserve previous command outputs (same behaviour as less command)~~
-    - [ ] implement keybinds
-        - [ ] <kbd>p</kbd> pause updating progresses
-        - [ ] <kbd>q</kbd> quit
-        - [ ] cursor
-    - [x] ~~Add quiet option `-q`~~
-    - [x] ~~Remove json_printer~~
-- counting algorithm
-    - [x] ~~Fix approximate counting algorithm~~
-    - [ ] Add larger demo data
-- enhancement
-    - [ ] efficient sortMap
-    - [ ] Add tuple counter (`-s` separator option)
-    - barchart
-        - [ ] character barchart
-        - [ ] output progresses as JSON and plot barchart using d3.js
