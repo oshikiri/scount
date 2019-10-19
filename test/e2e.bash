@@ -7,4 +7,4 @@ if [[ $actual != $expected ]]; then
   exit 1
 fi
 
-echo "(test_scount.bash) All test passed"
+echo "(test/e2e.bash) All test passed"

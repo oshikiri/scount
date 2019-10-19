@@ -33,4 +33,4 @@ jobs:
         go build -v .
         go test
         go install -v .
-        bash ./test/test_scount.bash
+        bash ./test/e2e.bash
