@@ -32,6 +32,10 @@ func (counter MapCounter) get(item string) int {
 	return counter.counts[item]
 }
 
+func (counter MapCounter) getSize() uint64 {
+	return uint64(len(counter.counts))
+}
+
 func (counter MapCounter) toJSON() string {
 	s, _ := json.Marshal(counter.counts)
 	return string(s)

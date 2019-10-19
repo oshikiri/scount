@@ -77,6 +77,10 @@ func (counter ApproximateCounter) get(item string) int {
 	return 0
 }
 
+func (counter ApproximateCounter) getSize() uint64 {
+	return uint64(len(counter.counts))
+}
+
 func (counter ApproximateCounter) toJSON() string {
 	for k, v := range counter.counts {
 		counter.counts[k] = v + counter.errors[k]

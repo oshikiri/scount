@@ -6,5 +6,6 @@ type Counter interface {
 	increment(item string) int
 	get(item string) int
 	getCountingResult() map[string]int
+	getSize() uint64
 	toJSON() string
 }

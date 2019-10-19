@@ -60,7 +60,7 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		writer.Write([]byte(line))
 	}
 
-	writer.Write([]byte(createCaption(nBytes)))
+	writer.Write([]byte(createCaption(nBytes, counter.getSize())))
 	writer.Flush()
 
 	printer.printOnTscreen(buffer.String())
@@ -112,9 +112,10 @@ func NewTablePrinter(flushMilliSec int64, topnPrint int) *TablePrinter {
 	return printer
 }
 
-func createCaption(nBytes int64) string {
+func createCaption(nBytes int64, nItems uint64) string {
 	byteSize := bytefmt.ByteSize(uint64(nBytes))
-	caption := fmt.Sprintf("Read: %v", byteSize)
+	counterSizeString := bytefmt.ByteSize(nItems)
+	caption := fmt.Sprintf("Read: %v, size of counter: %v", byteSize, counterSizeString)
 	return caption
 }
 
