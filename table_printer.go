@@ -44,15 +44,14 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	var buffer bytes.Buffer
 	writer := tabwriter.NewWriter(&buffer, 0, 0, 2, ' ', tabwriter.Debug)
 
-	counts := counter.getCountingResult()
-	sorted := sortMap(counts)
-	end := Min(len(sorted), printer.topnPrint)
+	sortedCounts := sortMap(counter.getCountingResult())
+	end := Min(len(sortedCounts), printer.topnPrint)
 
 	formatter := message.NewPrinter(language.English)
-	maxCountLength := len(formatter.Sprintf("%v", sorted[0].value))
+	maxCountLength := len(formatter.Sprintf("%v", sortedCounts[0].value))
 	countFormat := formatter.Sprintf("%%%dv", maxCountLength+1)
 
-	for i, c := range sorted {
+	for i, c := range sortedCounts {
 		if i >= end {
 			break
 		}
