@@ -61,12 +61,15 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 	}
 
 	writer.Write([]byte(createCaption(nBytes)))
-
 	writer.Flush()
 
+	printer.printOnTscreen(buffer.String(), currentDatetime)
+	printer.lastFlushedDatetime = currentDatetime
+}
+
+func (printer TablePrinter) printOnTscreen(content string) {
 	x := 0
 	y := 0
-	content := buffer.String()
 	for _, r := range []rune(content) {
 		if r != '\n' {
 			printer.tscreen.SetCell(x, y, tcell.StyleDefault, r)
@@ -77,8 +80,6 @@ func (printer *TablePrinter) print(counter Counter, nBytes int64, nChunks int64,
 		}
 	}
 	printer.tscreen.Show()
-
-	printer.lastFlushedDatetime = currentDatetime
 }
 
 func (printer *TablePrinter) exit(counter Counter) {
