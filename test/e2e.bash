@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 expected='{"a":7,"b":2}'
-actual=$(cat ./demo/sample_data.txt | scount -q)
+actual=$(echo 'a a a a b a a a b' | tr ' ' '\n' | scount -q)
 if [[ $actual != $expected ]]; then
   echo "sample_data.txt: expected ${expected} but got ${actual}"
   exit 1
 fi
 
-echo "(test_scount.bash) All test passed"
+echo "(test/e2e.bash) All test passed"
