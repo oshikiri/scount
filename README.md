@@ -65,6 +65,7 @@ go test
     - [x] ~~Fix approximate counting algorithm~~
     - [ ] Add larger demo data
 - enhancement
+    - [ ] efficient sortMap
     - [ ] Add tuple counter (`-s` separator option)
     - barchart
         - [ ] character barchart
