@@ -1,0 +1,24 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+
+  "data": {
+    "url": "./results/elasped-times.tsv",
+    "format": {
+      "type": "tsv"
+    }
+  },
+  "mark": {
+    "type": "boxplot"
+  },
+
+  "encoding": {
+    "y": {
+      "field": "command",
+      "type": "nominal"
+    },
+    "x": {
+      "field": "elapsed_time",
+      "type": "quantitative"
+    }
+  }
+}
