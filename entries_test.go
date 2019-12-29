@@ -15,7 +15,7 @@ func TestEntryListLen(t *testing.T) {
 
 func TestSortMap(t *testing.T) {
 	m := map[string]int{"a": 10, "b": 20, "c": 5}
-	actual := sortMap(m)
+	actual := sortMap(m, 3)
 	expected := []Entry{
 		Entry{"b", 20},
 		Entry{"a", 10},

@@ -26,7 +26,7 @@ func (l EntryList) Less(i, j int) bool {
 	return (l[i].value < l[j].value)
 }
 
-func sortMap(m map[string]int) EntryList {
+func sortMap(m map[string]int, topn int) EntryList {
 	list := EntryList{}
 	for k, v := range m {
 		entry := Entry{k, v}
