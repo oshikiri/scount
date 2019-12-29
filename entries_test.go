@@ -13,13 +13,25 @@ func TestEntryListLen(t *testing.T) {
 	}
 }
 
-func TestSortMap(t *testing.T) {
+func TestExtractTopnItemsWhenTopnIsEqualToTheLength(t *testing.T) {
 	m := map[string]int{"a": 10, "b": 20, "c": 5}
-	actual := sortMap(m, 3)
+	actual := extractTopnItems(m, 3)
 	expected := []Entry{
 		{"b", 20},
 		{"a", 10},
 		{"c", 5},
+	}
+	if !equalEntryList(actual, expected) {
+		t.Errorf("Unexpected return value: %v != %v", actual, expected)
+	}
+}
+
+func TestExtractTopnItemsWhenTopnIsSmallerThanTheLength(t *testing.T) {
+	m := map[string]int{"a": 10, "b": 20, "c": 5}
+	actual := extractTopnItems(m, 2)
+	expected := []Entry{
+		{"b", 20},
+		{"a", 10},
 	}
 	if !equalEntryList(actual, expected) {
 		t.Errorf("Unexpected return value: %v != %v", actual, expected)
