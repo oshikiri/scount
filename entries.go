@@ -1,7 +1,5 @@
 package main
 
-import "sort"
-
 // Entry is key-value pair to sort
 type Entry struct {
 	key   string
@@ -26,13 +24,28 @@ func (l EntryList) Less(i, j int) bool {
 	return (l[i].value < l[j].value)
 }
 
-func sortMap(m map[string]int) EntryList {
+func extractTopnItems(m map[string]int, topn int) EntryList {
 	list := EntryList{}
 	for k, v := range m {
 		entry := Entry{k, v}
 		list = append(list, entry)
 	}
 
-	sort.Sort(sort.Reverse(list))
-	return list
+	// https://en.wikipedia.org/wiki/Selection_algorithm#Partial_selection_sort
+	for i, e := range list {
+		if i >= topn {
+			return list[:topn]
+		}
+		iMax := i
+		eMax := e
+		for j := i; j < len(list); j++ {
+			if list[j].value > eMax.value {
+				iMax = j
+				eMax = list[j]
+			}
+		}
+		list.Swap(i, iMax)
+	}
+
+	return list[:topn]
 }
