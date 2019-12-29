@@ -1,4 +1,4 @@
-scount: a commend-line streaming counter with rich progress report
+scount: a command-line streaming counter with rich progress report
 ==========
 
 [![Build Status](https://github.com/oshikiri/scount/workflows/Go/badge.svg)](https://github.com/oshikiri/scount/actions) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount)
