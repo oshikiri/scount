@@ -27,15 +27,15 @@ and then add `~/go/bin` to `$PATH`.
 $ scount -h
 Usage of scount:
   -a    Use approximate counting algorithm (default is naive counting)
-  -e float
+  -ae float
         Epsilon of lossy counting algorithm (default 1e-05)
+  -as float
+        Support of lossy counting algorithm (default 2e-05)
   -f int
         Flush counting progress every X [msec] (default 200)
   -n int
         Print the top N items (default 10)
-  -q    Turn on quiet mode
-  -s float
-        Support of lossy counting algorithm (default 2e-05)
+  -q    Suppress a progress report
 ```
 
 
