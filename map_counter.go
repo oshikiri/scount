@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"sort"
 )
 
 // MapCounter is a simple counter utility using hash map
@@ -42,6 +43,7 @@ func (counter MapCounter) toJSON() string {
 		entry := Entry{k, v}
 		entryList = append(entryList, entry)
 	}
+	sort.Sort(sort.Reverse(entryList))
 
 	s, _ := json.Marshal(entryList)
 	return string(s)

@@ -1,6 +1,9 @@
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"sort"
+)
 
 // ApproximateCounter is a counter using streaming counting algorithm
 //
@@ -91,6 +94,7 @@ func (counter ApproximateCounter) toJSON() string {
 		entry := Entry{k, v}
 		entryList = append(entryList, entry)
 	}
+	sort.Sort(sort.Reverse(entryList))
 
 	s, _ := json.Marshal(entryList)
 	return string(s)

@@ -31,7 +31,7 @@ func TestToJson(t *testing.T) {
 	counter.increment("bob")
 
 	got := counter.toJSON()
-	if got != "[{\"count\":1,\"item\":\"alice\"},{\"count\":2,\"item\":\"bob\"}]" {
+	if got != "[{\"count\":2,\"item\":\"bob\"},{\"count\":1,\"item\":\"alice\"}]" {
 		t.Errorf("Unexpected json: %v", got)
 	}
 }
