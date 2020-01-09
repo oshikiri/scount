@@ -1,9 +1,16 @@
 package main
 
+import "encoding/json"
+
 // Entry is key-value pair to sort
 type Entry struct {
 	key   string
 	value int
+}
+
+// MarshalJSON converts Entry to JSON element
+func (entry Entry) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{"item": entry.key, "count": entry.value})
 }
 
 // EntryList for sorting

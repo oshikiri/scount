@@ -85,7 +85,14 @@ func (counter ApproximateCounter) toJSON() string {
 	for k, v := range counter.counts {
 		counter.counts[k] = v + counter.errors[k]
 	}
-	s, _ := json.Marshal(counter.counts)
+
+	entryList := EntryList{}
+	for k, v := range counter.counts {
+		entry := Entry{k, v}
+		entryList = append(entryList, entry)
+	}
+
+	s, _ := json.Marshal(entryList)
 	return string(s)
 }
 
