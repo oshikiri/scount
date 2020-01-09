@@ -16,8 +16,19 @@ func (entry Entry) MarshalJSON() ([]byte, error) {
 // EntryList for sorting
 type EntryList []Entry
 
-func (l EntryList) swap(i, j int) {
+func (l EntryList) Len() int {
+	return len(l)
+}
+
+func (l EntryList) Swap(i, j int) {
 	l[i], l[j] = l[j], l[i]
+}
+
+func (l EntryList) Less(i, j int) bool {
+	if l[i].value == l[j].value {
+		return (l[i].key < l[j].key)
+	}
+	return (l[i].value < l[j].value)
 }
 
 func extractTopnItems(m map[string]int, topn int) EntryList {
@@ -40,7 +51,7 @@ func extractTopnItems(m map[string]int, topn int) EntryList {
 				eMax = list[j]
 			}
 		}
-		list.swap(i, iMax)
+		list.Swap(i, iMax)
 	}
 
 	return list[:topn]
