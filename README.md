@@ -7,7 +7,8 @@ scount: a command-line streaming counter with rich progress report
 You can use it instead of `sort | uniq -c`.
 
 ```shell
-cat ./demo/text8 | tr ' ' '\n' | scount -a | jq .the
+cat ./demo/text8 | tr ' ' '\n' | scount -a | \
+    jq '. | sort_by(.count) | reverse | .[0:3]'
 ```
 
 ![demo animation: approximate count using text8](demo/demo-text8-approximate-count.gif)

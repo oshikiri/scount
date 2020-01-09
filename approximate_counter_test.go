@@ -65,7 +65,7 @@ func TestApproximateCounterToJson(t *testing.T) {
 	counter.increment("bbb")
 
 	got := counter.toJSON()
-	if got != "{\"aaa\":1,\"bbb\":2}" {
+	if got != "[{\"count\":2,\"item\":\"bbb\"},{\"count\":1,\"item\":\"aaa\"}]" {
 		t.Errorf("Unexpected json: %v", got)
 	}
 }
