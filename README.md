@@ -15,6 +15,10 @@ cat ./demo/text8 | tr ' ' '\n' | scount -a | \
 
 
 ## Installation
+### Using binary
+See <https://github.com/oshikiri/scount/releases>.
+
+### From source code
 ```sh
 go get github.com/oshikiri/scount
 go install github.com/oshikiri/scount
