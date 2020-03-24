@@ -1,6 +1,6 @@
 module scount
 
-go 1.12
+go 1.14
 
 require (
 	code.cloudfoundry.org/bytefmt v0.0.0-20190819182555-854d396b647c
