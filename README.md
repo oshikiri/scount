@@ -44,13 +44,11 @@ Usage of scount:
 ```
 
 
-## Build
+## Development
 ```sh
+# Create ./scount binary
 go build
-```
 
-
-## Testing
-```sh
+# Run tests
 go test
 ```
