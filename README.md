@@ -1,6 +1,10 @@
 scount: a command-line streaming counter with rich progress report
 ==========
 
+See <https://github.com/oshikiri/count.pl>
+
+---
+
 [![Build Status](https://github.com/oshikiri/scount/workflows/Go/badge.svg)](https://github.com/oshikiri/scount/actions) [![go report](https://goreportcard.com/badge/github.com/oshikiri/scount)](https://goreportcard.com/report/github.com/oshikiri/scount) [![release](https://img.shields.io/github/v/release/oshikiri/scount.svg)](https://github.com/oshikiri/scount/releases)
 
 
